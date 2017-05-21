@@ -1,15 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import {
-  ListView,
-  View,
-} from 'react-native';
+import { ListView, View } from "react-native";
 
-import shallowequal from 'shallowequal';
-import InvertibleScrollView from 'react-native-invertible-scroll-view';
-import md5 from 'md5';
-import LoadEarlier from './LoadEarlier';
-import Message from './Message';
+import shallowequal from "shallowequal";
+import InvertibleScrollView from "react-native-invertible-scroll-view";
+import md5 from "md5";
+import LoadEarlier from "./LoadEarlier";
+import Message from "./Message";
 
 export default class MessageContainer extends React.Component {
   constructor(props) {
@@ -39,7 +36,8 @@ export default class MessageContainer extends React.Component {
         const previousMessage = messages[i + 1] || {};
         const nextMessage = messages[i - 1] || {};
         // add next and previous messages to hash to ensure updates
-        const toHash = JSON.stringify(m) + previousMessage._id + nextMessage._id;
+        const toHash =
+          JSON.stringify(m) + previousMessage._id + nextMessage._id;
         o[m._id] = {
           ...m,
           previousMessage,
@@ -67,14 +65,17 @@ export default class MessageContainer extends React.Component {
     }
     const messagesData = this.prepareMessages(nextProps.messages);
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(messagesData.blob, messagesData.keys)
+      dataSource: this.state.dataSource.cloneWithRows(
+        messagesData.blob,
+        messagesData.keys
+      )
     });
   }
 
   renderFooter() {
     if (this.props.renderFooter) {
       const footerProps = {
-        ...this.props,
+        ...this.props
       };
       return this.props.renderFooter(footerProps);
     }
@@ -84,14 +85,12 @@ export default class MessageContainer extends React.Component {
   renderLoadEarlier() {
     if (this.props.loadEarlier === true) {
       const loadEarlierProps = {
-        ...this.props,
+        ...this.props
       };
       if (this.props.renderLoadEarlier) {
         return this.props.renderLoadEarlier(loadEarlierProps);
       }
-      return (
-        <LoadEarlier {...loadEarlierProps}/>
-      );
+      return <LoadEarlier {...loadEarlierProps} />;
     }
     return null;
   }
@@ -102,10 +101,16 @@ export default class MessageContainer extends React.Component {
 
   renderRow(message, sectionId, rowId) {
     if (!message._id && message._id !== 0) {
-      console.warn('GiftedChat: `_id` is missing for message', JSON.stringify(message));
+      console.warn(
+        "GiftedChat: `_id` is missing for message",
+        JSON.stringify(message)
+      );
     }
     if (!message.user) {
-      console.warn('GiftedChat: `user` is missing for message', JSON.stringify(message));
+      console.warn(
+        "GiftedChat: `user` is missing for message",
+        JSON.stringify(message)
+      );
       message.user = {};
     }
 
@@ -115,13 +120,13 @@ export default class MessageContainer extends React.Component {
       currentMessage: message,
       previousMessage: message.previousMessage,
       nextMessage: message.nextMessage,
-      position: message.user._id === this.props.user._id ? 'right' : 'left',
+      position: message.user._id === this.props.user._id ? "right" : "left"
     };
 
     if (this.props.renderMessage) {
       return this.props.renderMessage(messageProps);
     }
-    return <Message {...messageProps}/>;
+    return <Message {...messageProps} />;
   }
 
   renderScrollComponent(props) {
@@ -137,17 +142,14 @@ export default class MessageContainer extends React.Component {
 
   render() {
     return (
-      <View ref='container' style={{flex:1}}>
+      <View ref="container" style={{ flex: 1 }}>
         <ListView
           enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           initialListSize={20}
           pageSize={20}
-
           {...this.props.listViewProps}
-
           dataSource={this.state.dataSource}
-
           renderRow={this.renderRow}
           renderHeader={this.renderFooter}
           renderFooter={this.renderLoadEarlier}
@@ -164,8 +166,7 @@ MessageContainer.defaultProps = {
   renderFooter: null,
   renderMessage: null,
   listViewProps: {},
-  onLoadEarlier: () => {
-  },
+  onLoadEarlier: () => {}
 };
 
 MessageContainer.propTypes = {
@@ -174,5 +175,5 @@ MessageContainer.propTypes = {
   renderFooter: React.PropTypes.func,
   renderMessage: React.PropTypes.func,
   onLoadEarlier: React.PropTypes.func,
-  listViewProps: React.PropTypes.object,
+  listViewProps: React.PropTypes.object
 };
